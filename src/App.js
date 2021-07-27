@@ -1,82 +1,54 @@
-import ReactDOM from 'react-dom';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import TodoInput from './TodoInput';
+import TodoList from './TodoList';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1 className="App-title">Hello, World!</h1>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tasks: [
+        { title: 'TODO1つ目', id: 0 },
+        { title: 'TODO2つ目', id: 1 },
+      ],
+      uniqueId: 1,
+    };
+    this.addTodo = this.addTodo.bind(this);
+    this.resetTodo = this.resetTodo.bind(this);
+  }
+
+  resetTodo() {
+    this.setState({
+      tasks: [],
+    });
+  }
+
+  addTodo(title) {
+    const {
+      tasks,
+      uniqueId,
+    } = this.state;
+
+    tasks.push({
+      title,
+      id: uniqueId,
+    });
+
+    this.setState({
+      tasks,
+      uniqueId: uniqueId + 1,
+    });
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <h1>TODO App</h1>
+        <button onClick={this.resetTodo}>リセット</button>
+        <TodoInput addTodo={this.addTodo} />
+        <TodoList tasks={this.state.tasks} />
+      </div>
+    );
+  }
 }
-
-const Hello = (props) => {
-  // return <div>こんにちは、{props.name}さん</div>;
-  return <div>{props.name}さんの誕生日は{props.birthday}です</div>;
-};
-
-ReactDOM.render(
-  <div>
-    <Hello name="坂本龍馬" birthday="1836/01/03" />
-    <Hello name="西郷隆盛" />
-    <Hello name="勝海舟" />
-    <Hello name={"織田信長"} />
-    <Hello name={["坂本龍馬", "西郷隆盛"]} />
-  </div>,
-  document.getElementById('root')
-);
-
-const Hello2 = (props) => {
-  return (
-    <div>こんにちは、{props.children}さん</div>
-  );
-};
-
-const Greeting = (props) => {
-  return (
-    <div>
-      <div>ご挨拶</div>
-      {props.children}
-    </div>
-  );
-};
-
-ReactDOM.render(
-  <Greeting>
-    <Hello2>坂本龍馬</Hello2>
-    <Hello2>西郷隆盛</Hello2>
-  </Greeting>,
-  document.getElementById('root')
-);
-
-const Profile = (props) => {
-  return (
-    <ul>
-      <li>名前: {props.name}</li>
-      <li>誕生日: {props.birthDay}</li>
-    </ul>
-  )
-}
-
-const profile = {
-  name: '坂本龍馬',
-  birthDay: '1836/01/03'
-};
-
-ReactDOM.render(
-  <Profile {...profile}/>,
-  document.getElementById('root')
-);
 
 export default App;
